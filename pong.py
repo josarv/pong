@@ -1,4 +1,22 @@
 import turtle
+import time
+
+_tick2_frame = 0
+_tick2_fps = 20000000
+_tick2_t0 = time.time()
+
+
+def tick(fps=60):
+    global _tick2_frame, _tick2_fps, _tick2_t0
+    n = _tick2_fps / fps
+    _tick2_frame += n
+    while n > 0:
+        n -= 1
+    if time.time() - _tick2_t0 > 1:
+        _tick2_t0 = time.time()
+        _tick2_fps = _tick2_frame
+        _tick2_frame = 0
+
 
 horizontal = 1600
 vertical = 900
@@ -32,11 +50,11 @@ paddle_b.goto(paddle_b_pos, 0)
 ball = turtle.Turtle()
 ball.speed(0)
 ball.shape("square")
-ball.color("red")  # white
+ball.color("white")
 ball.penup()
 ball.goto(0, 0)
-ball.dx = horizontal * 0.00015
-ball.dy = vertical * 0.00015
+ball.dx = horizontal / 1000
+ball.dy = vertical / 1000
 
 text_pos = vertical / 2 - 40
 pen = turtle.Turtle()
@@ -95,7 +113,9 @@ left_bound = - horizontal / 2 + 10
 
 paddle_a_bound = - horizontal / 2 - 50
 
-while True:
+
+def run_game():
+    global score_a, score_b
     win.update()
     ball.setx(ball.xcor() + ball.dx)
     ball.sety(ball.ycor() + ball.dy)
@@ -117,8 +137,6 @@ while True:
         score_b += 1
         pen.clear()
         pen.write("Player A: {} Player B: {}".format(score_a, score_b), align="center", font=("Courier", 24, "normal"))
-    if score_a > 10 or score_b > 10:
-        break
     if (paddle_a_pos + 10 < ball.xcor() < paddle_a_pos + 20) and (
             paddle_a.ycor() + 50 > ball.ycor() > paddle_a.ycor() - 50):
         ball.setx(paddle_a_pos + 20)
@@ -127,3 +145,10 @@ while True:
             paddle_b.ycor() + 50 > ball.ycor() > paddle_b.ycor() - 50):
         ball.setx(paddle_b_pos - 20)
         ball.dx *= -1
+
+
+while True:
+    tick(120)
+    run_game()
+    if score_a > 10 or score_b > 10:
+        break
