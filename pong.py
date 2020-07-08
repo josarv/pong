@@ -117,6 +117,8 @@ while True:
         score_b += 1
         pen.clear()
         pen.write("Player A: {} Player B: {}".format(score_a, score_b), align="center", font=("Courier", 24, "normal"))
+    if score_a > 10 or score_b > 10:
+        break
     if (paddle_a_pos + 10 < ball.xcor() < paddle_a_pos + 20) and (
             paddle_a.ycor() + 50 > ball.ycor() > paddle_a.ycor() - 50):
         ball.setx(paddle_a_pos + 20)
